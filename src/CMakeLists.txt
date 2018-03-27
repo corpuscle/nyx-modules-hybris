@@ -22,9 +22,13 @@ pkg_check_modules(GLIB2 REQUIRED glib-2.0)
 include_directories(${GLIB2_INCLUDE_DIRS})
 webos_add_compiler_flags(ALL ${GLIB2_CFLAGS_OTHER})
 
-pkg_check_modules(NYXLIB REQUIRED nyx)
+pkg_check_modules(NYXLIB REQUIRED nyx>=7)
 include_directories(${NYXLIB_INCLUDE_DIRS})
 webos_add_compiler_flags(ALL ${NYXLIB_CFLAGS_OTHER})
+
+pkg_check_modules(PMLOG REQUIRED PmLogLib)
+include_directories(${PMLOG_INCLUDE_DIRS})
+webos_add_compiler_flags(ALL ${PMLOG_CFLAGS_OTHER})
 
 pkg_check_modules(ANDROID_HEADERS REQUIRED android-headers)
 include_directories(${ANDROID_HEADERS_INCLUDE_DIRS})
@@ -81,7 +85,8 @@ macro(nyx_create_module module)
 	install(TARGETS ${module} DESTINATION ${NYX_MODULE_DIR})
 endmacro()
 
-add_subdirectory(led_controller)
-add_subdirectory(device_info)
-add_subdirectory(system)
-add_subdirectory(haptics)
+#FIXME DISABLED LED & HAPTICS FOR NOW BECAUSE CANNOT GET IT TO WORK WITH 14.1 due to changed API's. 
+#add_subdirectory(led_controller)
+#add_subdirectory(device_info)
+#add_subdirectory(system)
+#add_subdirectory(haptics)

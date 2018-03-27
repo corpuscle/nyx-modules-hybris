@@ -17,10 +17,14 @@
 *
 * LICENSE@@@ */
 
-#include <nyx/nyx_module.h>
-#include <android/hardware_legacy/vibrator.h>
+#include <android/hardware/vibrator.h>
 #include <glib.h>
 #include <stdlib.h>
+#include <nyx/nyx_module.h>
+#include <nyx/common/nyx_macros.h>
+#include <nyx/module/nyx_utils.h>
+#include <nyx/module/nyx_log.h>
+#include "msgid.h"
 
 #define VIBRATOR_PAUSE 25 //ms
 
@@ -34,11 +38,11 @@ NYX_DECLARE_MODULE(NYX_DEVICE_HAPTICS, "Haptics")
 
 nyx_error_t nyx_module_open (nyx_instance_t instance, nyx_device_t** device_ptr)
 {
-	if (!vibrator_exists())
+	if (!vibra_exists())
 		return NYX_ERROR_DEVICE_NOT_EXIST;
 
 	if (nyxDev) {
-		nyx_info("Haptics module already open");
+		nyx_info(MSGID_NYX_HYBRIS_HAP_ALREADY_OPEN_ERR, 0, "Haptics module already open");
 		*device_ptr = (nyx_device_t *)nyxDev;
 		return NYX_ERROR_NONE;
 	}
@@ -64,7 +68,7 @@ nyx_error_t nyx_module_open (nyx_instance_t instance, nyx_device_t** device_ptr)
 
 nyx_error_t nyx_module_close (nyx_device_t* device) {
 	vibrate_stop_timeout();
-	vibrator_off();
+	vibra_off();
 	free(nyxDev);
 	free(nyxConf);
 	return NYX_ERROR_NONE;
@@ -85,7 +89,7 @@ nyx_error_t vibrate (nyx_device_handle_t handle, nyx_haptics_configuration_t con
 	*nyxConf = configuration;
 
 	if (nyxConf->period > VIBRATOR_PAUSE) {
-		vibrator_on(nyxConf->period - VIBRATOR_PAUSE);
+		vibra_on(nyxConf->period - VIBRATOR_PAUSE);
 		nyxDev->haptic_effect_id = g_timeout_add (nyxConf->period, (GSourceFunc) vibrate_cb, NULL);
 	}
 
@@ -94,13 +98,13 @@ nyx_error_t vibrate (nyx_device_handle_t handle, nyx_haptics_configuration_t con
 
 nyx_error_t cancel (nyx_device_handle_t handle, int32_t haptics_id) {
 	vibrate_stop_timeout();
-	vibrator_off();
+	vibra_off();
 	return NYX_ERROR_NONE;
 }
 
 nyx_error_t cancel_all (nyx_device_handle_t handle) {
 	vibrate_stop_timeout();
-	vibrator_off();
+	vibra_off();
 	return NYX_ERROR_NONE;
 }
 
@@ -110,8 +114,8 @@ gboolean vibrate_cb (gpointer user_data) {
 		nyxDev->haptic_effect_id = 0;
 		return false;
 	}
-	vibrator_off();
-	vibrator_on(nyxConf->period - VIBRATOR_PAUSE);
+	vibra_off();
+	vibra_on(nyxConf->period - VIBRATOR_PAUSE);
 	return true;
 }
 

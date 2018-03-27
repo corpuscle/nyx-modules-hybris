@@ -1,6 +1,4 @@
-# @@@LICENSE
-#
-#      Copyright (c) 2010-2012 Hewlett-Packard Development Company, L.P.
+# Copyright (c) 2010-2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# LICENSE@@@
+# SPDX-License-Identifier: Apache-2.0
 
 include_directories(.)
 
-nyx_create_module(MicroControllerLEDsDefault led_controller.c)
+webos_build_nyx_module(MicroControllerLEDsDefault 
+                       SOURCES led_controller.c
+                       LIBRARIES ${GLIB2_LDFLAGS} ${PMLOG_LDFLAGS} -landroid-properties)
