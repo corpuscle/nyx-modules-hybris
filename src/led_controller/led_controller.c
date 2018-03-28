@@ -26,6 +26,7 @@
 #include <android/hardware/lights.h>
 #include <nyx/nyx_module.h>
 #include <nyx/module/nyx_utils.h>
+#include <nyx/module/nyx_log.h>
 #include "msgid.h"
 
 NYX_DECLARE_MODULE(NYX_DEVICE_LED_CONTROLLER, "LedControllers");

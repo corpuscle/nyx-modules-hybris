@@ -35,6 +35,7 @@
 #include <stdbool.h>
 #include <glib.h>
 #include <nyx/nyx_module.h>
+#include <nyx/module/nyx_log.h>
 #include "msgid.h"
 #include "alarm.h"
 #include "android_alarm.h"
@@ -160,7 +161,7 @@ bool android_alarm_set(time_t expiry)
 
 	rc = ioctl(alarm_fd, ANDROID_ALARM_SET(ANDROID_ALARM_RTC_WAKEUP), &wakeup_time);
 	if (rc != 0) {
-		g_warning("Failed to set wakeup alarm at %ld (err %ld)", expiry, rtc);
+		g_warning("Failed to set wakeup alarm at %ld (err %ld)", expiry, rc);
 		return false;
 	}
 
