@@ -25,7 +25,6 @@
 #include <android/system/window.h>
 #include <android/hardware/lights.h>
 #include <nyx/nyx_module.h>
-#include <nyx/common/nyx_macros.h>
 #include <nyx/module/nyx_utils.h>
 #include "msgid.h"
 
